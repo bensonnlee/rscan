@@ -6,7 +6,7 @@ Scan into the SRC within seconds
 
 ## Installation
 
-The app can be installed through the Apple App store on compatible iOS devices: https://apple.co/3sGuxrM
+The app can be installed through the Apple App Store on compatible iOS devices: https://apple.co/3sGuxrM
 
 ## Usage
 
