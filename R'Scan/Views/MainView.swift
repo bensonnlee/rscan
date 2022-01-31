@@ -125,7 +125,7 @@ struct MainView: View {
             if response.isEmpty {
                 offline = true
                 // sleep 1 second and call self
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // TODO: change to while loop to save resouces from recursion
                     refreshBarcode()
                 }
             }
