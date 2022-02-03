@@ -22,11 +22,26 @@ struct LoginView: View {
             // set background to navy and layer on logo at top
             Constants.navy.ignoresSafeArea()
             VStack() {
-                Text("-|||||-")
-                    .font(.system(.title, design: .rounded))
-                    .fontWeight(.semibold)
-                    .foregroundColor(Constants.dandelion)
-                    .offset(y: Constants.titleOffset)
+                HStack() {
+                    Image("")
+                        .resizable()
+                        .frame(width: 50, height: 0)
+                        .padding(.leading, 25)
+                    Spacer()
+                    Text("-|||||-")
+                        .font(.system(.title, design: .rounded))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Constants.dandelion)
+                        .offset(y: Constants.titleOffset)
+                    Spacer()
+                    Link(destination: Constants.privacyPolicyURL) {
+                            Image("Arrow")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .offset(y: Constants.arrowOffset)
+                                .padding(.trailing, 25)
+                    }
+                }
                 Spacer()
             }
             // add content on top of background and offset to keep logo
@@ -75,9 +90,9 @@ struct LoginView: View {
                              : nil)
                     .padding(.bottom, 20)
                 Button(action: {
-                    self.hideKeyboard() // dismiss keyboard
                     invalidCredentials = false // reset invalid credentials marker
                     login() // call authenticate endpoint
+                    self.hideKeyboard() // dismiss keyboard
                 })
                 {
                     // show spinner if login button is pressed

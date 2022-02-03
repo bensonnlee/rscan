@@ -11,7 +11,8 @@ import SwiftUI
 struct Constants {
     static let defaults = UserDefaults.standard
     static let screenSize = UIScreen.main.bounds
-    static let titleOffset = screenSize.height == 667.0 ? UIScreen.main.bounds.height/45 : UIScreen.main.bounds.height/25
+    static let titleOffset = screenSize.height == 667.0 ? 8 : UIScreen.main.bounds.height/33
+    static let arrowOffset = screenSize.height == 667.0 ? 10 : UIScreen.main.bounds.height/31.5
     static let mainModalOffset = UIScreen.main.bounds.height/10
     
     static let lightGrey = Color(red: 239.0/255.0,
@@ -29,6 +30,8 @@ struct Constants {
     static let rose: Color = Color(red: 255/255.0,
                                    green: 40/255.0,
                                    blue: 50/255.0)
+    
+    static let privacyPolicyURL: URL = URL(string: "https://kozzza.github.io/rscan.github.io/")!
     
  }
 

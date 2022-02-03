@@ -11,7 +11,7 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject var authentication: Authentication
     
-    @State private var barcode: String = "&900415175456&"
+    @State private var barcode: String = ""
     @State private var isAnimating: Bool = false
     @State private var resetCalled: Bool = false
     @State private var fusionKey: String = Constants.defaults.string(forKey: "fusionKey") ?? ""
@@ -25,12 +25,26 @@ struct MainView: View {
             // set background to navy and layer on logo at top
             Constants.navy.ignoresSafeArea()
             VStack() {
-                Text("-|||||-")
-                    .font(.system(.title, design: .rounded))
-                    .fontWeight(.semibold)
-                    .foregroundColor(
-                        Constants.dandelion)
-                    .offset(y: Constants.titleOffset)
+                HStack() {
+                    Image("")
+                        .resizable()
+                        .frame(width: 50, height: 0)
+                        .padding(.leading, 25)
+                    Spacer()
+                    Text("-|||||-")
+                        .font(.system(.title, design: .rounded))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Constants.dandelion)
+                        .offset(y: Constants.titleOffset)
+                    Spacer()
+                    Link(destination: Constants.privacyPolicyURL) {
+                            Image("Arrow")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .offset(y: Constants.arrowOffset)
+                                .padding(.trailing, 25)
+                    }
+                }
                 Spacer()
             }
             // add content on top of background and offset to keep logo
@@ -43,9 +57,18 @@ struct MainView: View {
                         .padding()
                 }
                 else {
-                    BarCodeView(barcode: $barcode)
-                        .frame(width: Constants.screenSize.width/1.2,height: Constants.screenSize.height/2.5)
-                        .padding()
+                    // display spinner if barcode hasn't been retrieved yet
+                    if barcode.isEmpty {
+                        ProgressView()
+                            .scaleEffect(1.5, anchor: .center)
+                            .frame(width: Constants.screenSize.width/1.2, height: Constants.screenSize.height/2.5)
+                            .padding()
+                    }
+                    else {
+                        BarCodeView(barcode: $barcode)
+                            .frame(width: Constants.screenSize.width/1.2, height: Constants.screenSize.height/2.5)
+                            .padding()
+                    }
                 }
                 Button(action: {
                     manualRefresh()
@@ -196,8 +219,24 @@ struct MainView_Previews: PreviewProvider {
     }
 }
 
-
-
-
-
-
+struct CustomCircularProgressViewStyle: ProgressViewStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Circle()
+                .trim(from: 0.0, to: CGFloat(configuration.fractionCompleted ?? 0))
+                .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, dash: [10, 5]))
+                .rotationEffect(.degrees(-90))
+                .frame(width: 200)
+            
+//            if let fractionCompleted = configuration.fractionCompleted {
+//                Text(fractionCompleted < 1 ?
+//                        "Completed \(Int((configuration.fractionCompleted ?? 0) * 100))%"
+//                        : "Done!"
+//                )
+//                .fontWeight(.bold)
+//                .foregroundColor(fractionCompleted < 1 ? .orange : .green)
+//                .frame(width: 180)
+//            }
+        }
+    }
+}
