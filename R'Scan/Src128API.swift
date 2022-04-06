@@ -26,7 +26,7 @@ class Src128API {
     let username: String
     let password: String
     
-    let base_url = "https://src-128-8ilny.ondigitalocean.app"
+    let base_url = "https://src-128.herokuapp.com"
     
     init(username: String, password: String) {
         self.username = username

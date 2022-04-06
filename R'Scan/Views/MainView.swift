@@ -13,7 +13,6 @@ struct MainView: View {
     
     @State private var barcode: String = ""
     @State private var isAnimating: Bool = false
-    @State private var resetCalled: Bool = false
     @State private var fusionKey: String = Constants.defaults.string(forKey: "fusionKey") ?? ""
     @State private var offline: Bool = false
     
@@ -127,17 +126,12 @@ struct MainView: View {
     func startRefresh() {
         refreshBarcode() // refresh barcode
         Timer.scheduledTimer(withTimeInterval: 12, repeats: true) { timer in
-            // stop timer if resetCalled turns true
-            if resetCalled {
-                timer.invalidate()
-            }
             refreshBarcode()
         }
     }
     
     func manualRefresh() {
         isAnimating = true
-        resetCalled = true
         refreshBarcode()
     }
 
@@ -157,7 +151,6 @@ struct MainView: View {
                 let authenticated: Bool? = response["authenticated"] as? Bool
                 if (authenticated == false) {
                     // response is 401 and username and password are no longer valid
-                    resetCalled = true
                     logout()
                     return
                 }
@@ -170,7 +163,6 @@ struct MainView: View {
                 }
                 
                 isAnimating = false
-                resetCalled = false
             }
         }
     }
@@ -227,16 +219,6 @@ struct CustomCircularProgressViewStyle: ProgressViewStyle {
                 .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, dash: [10, 5]))
                 .rotationEffect(.degrees(-90))
                 .frame(width: 200)
-            
-//            if let fractionCompleted = configuration.fractionCompleted {
-//                Text(fractionCompleted < 1 ?
-//                        "Completed \(Int((configuration.fractionCompleted ?? 0) * 100))%"
-//                        : "Done!"
-//                )
-//                .fontWeight(.bold)
-//                .foregroundColor(fractionCompleted < 1 ? .orange : .green)
-//                .frame(width: 180)
-//            }
         }
     }
 }
