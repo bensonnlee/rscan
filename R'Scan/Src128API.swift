@@ -26,7 +26,7 @@ class Src128API {
     let username: String
     let password: String
     
-    let base_url = "https://src-128.herokuapp.com"
+    let base_url = "https://src128-766399530086.us-west1.run.app"
     
     init(username: String, password: String) {
         self.username = username
@@ -34,6 +34,10 @@ class Src128API {
     }
     
     func authenticate(completion: @escaping (_ authenticated: Bool) -> ()) {
+        // Create ephemeral session (fixes iOS Simulator HTTP/2 bug)
+        let config = URLSessionConfiguration.ephemeral
+        let session = URLSession(configuration: config)
+        
         // build request
         var request = URLRequest(url: URL(string: base_url+"/authenticate")!)
         
@@ -43,7 +47,6 @@ class Src128API {
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
-        let session = URLSession.shared
         let task = session.dataTask(with: request) { (data, response, error) in
             guard error == nil else {
                 print(error!)
@@ -69,6 +72,10 @@ class Src128API {
     
     
     func getBarcode(_ fusionKey: String, completion: @escaping (_ response: Dictionary<String, Any>) -> ()) {
+        // Create ephemeral session (fixes iOS Simulator HTTP/2 bug)
+        let config = URLSessionConfiguration.ephemeral
+        let session = URLSession(configuration: config)
+        
         //build request
         var request = URLRequest(url: URL(string: base_url+"/barcode_id")!)
         
@@ -78,7 +85,6 @@ class Src128API {
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
 
-        let session = URLSession.shared
         let task = session.dataTask(with: request) { (data, response, error) in
             guard error == nil else {
                 print(error!)
