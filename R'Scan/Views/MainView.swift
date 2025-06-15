@@ -15,6 +15,7 @@ struct MainView: View {
     @State private var isAnimating: Bool = false
     @State private var fusionKey: String = Constants.defaults.string(forKey: "fusionKey") ?? ""
     @State private var offline: Bool = false
+    @State private var showingConfirmation: Bool = false
     
     let username = Constants.defaults.string(forKey: "username") ?? ""
     let password = Constants.defaults.string(forKey: "password") ?? ""
@@ -86,7 +87,7 @@ struct MainView: View {
                             .padding(.bottom, 20)
                     }
                     else {
-                        Text("Reset Barcode")
+                        Text("Refresh Barcode")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(height: 55)
@@ -98,7 +99,7 @@ struct MainView: View {
                 }
                 .disabled(isAnimating)
                 Button(action: {
-                    logout()
+                    showingConfirmation = true
                 })
                 {
                     Text("Clear Credentials")
@@ -109,6 +110,16 @@ struct MainView: View {
                         .background(Constants.rose)
                         .cornerRadius(10.0)
                         .padding(.bottom, 20)
+                }
+                .confirmationDialog("Clear Credentials", isPresented: $showingConfirmation) {
+                    Button("Clear Credentials", role: .destructive) {
+                        logout()
+                    }
+                    Button("Cancel", role: .cancel) {
+                        showingConfirmation = false
+                    }
+                } message: {
+                    Text("Are you sure you want to log out?")
                 }
             }
             .padding()
