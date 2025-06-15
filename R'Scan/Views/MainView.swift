@@ -16,6 +16,7 @@ struct MainView: View {
     @State private var fusionKey: String = Constants.defaults.string(forKey: "fusionKey") ?? ""
     @State private var offline: Bool = false
     @State private var showingConfirmation: Bool = false
+    @State private var lastRefreshTime: Date?
     
     let username = Constants.defaults.string(forKey: "username") ?? ""
     let password = Constants.defaults.string(forKey: "password") ?? ""
@@ -70,6 +71,14 @@ struct MainView: View {
                             .padding()
                     }
                 }
+
+                if let lastRefresh = lastRefreshTime{
+                    Text("Last updated: \(lastRefresh.formatted(date: .abbreviated, time: .standard))")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding(.bottom, 10)
+                }
+
                 Button(action: {
                     let impactFeedback = UIImpactFeedbackGenerator(style: .light)
                     impactFeedback.impactOccurred()
@@ -135,6 +144,10 @@ struct MainView: View {
         .onAppear {
             // start timer to refresh barcodes once view appears
             startRefresh()
+
+            if !barcode.isEmpty && !offline {
+                lastRefreshTime = Date()
+            }
         }
     }
     
@@ -148,6 +161,7 @@ struct MainView: View {
     func manualRefresh() {
         isAnimating = true
         refreshBarcode()
+        lastRefreshTime = Date()
     }
 
     func refreshBarcode() {
@@ -177,6 +191,7 @@ struct MainView: View {
                     Constants.defaults.set(fusionKey, forKey: "fusionKey") // save fusionKey for future requests
                 }
                 
+                lastRefreshTime = Date()
                 isAnimating = false
             }
         }
